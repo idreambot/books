@@ -1,0 +1,152 @@
+{{!-- {{#each booksList}}
+    <tr style="width: 100%;">
+        <td style="width: 25%;">{{title}} </td><br><br><br>
+      
+    </tr>
+{{/each}} --}}
+
+
+
+
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<style>
+    body{
+	padding-top:50px;
+	
+}
+
+
+
+.hiddenRow {
+    padding: 0 !important;
+}
+
+
+  #data tr {
+  display: none;
+  
+}
+.anchor{
+
+      decoration:none;
+  }
+  .anchor:hover{
+      background-color: blue;
+      color: azure;
+  }
+</style>
+
+<div class="container">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			
+			<div class="panel-body">
+                <table class="table table-condensed table-striped">
+                   
+                        <thead style="background-color: #46943a;color:white">
+						<tr>
+							<th></th>
+							<th>Title</th>
+							<th>Price</th>
+							<th>categories</th>
+							<th>authors</th>
+							<th>status</th>
+						</tr>
+					</thead>
+                    
+                </table>
+				<table id="data" class="table table-condensed table-striped">
+					
+					<tbody>
+                        {{#each booksList}}
+                            <tr data-toggle="collapse" data-target="#{{_id}}" class="accordion-toggle">
+                                <td>
+                                    <button style="color:#46943a" class="btn btn-default btn-xs"><span  class="glyphicon glyphicon-plus-sign"></span></button>
+                                </td>
+                                <td>{{title}}</td>
+                                <td>{{price}}</td>
+                                <td>{{categories}}</td>
+                                <td>{{authors}}</td>
+                                <td>{{status}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="12" class="hiddenRow">
+                                    <div class="accordian-body collapse row" id="{{_id}}">
+                                        <div class="col-lg-9" style="">
+                                            {{#if shortDescription}}
+                                                <h1>short Description :</h1> <p style="background-color: #f4eee8;"> {{shortDescription}} </p><br>
+                                            {{else}}
+                                                <h1>short Description :</h1> <p style="background-color: #f4eee8;"> Not Available</p><br>
+                                            {{/if}}
+
+                                            {{#if longDescription}}
+                                                <h1>Long Description :</h1> <p style="background-color: #f4eee8;"> {{longDescription}} </p><br>
+                                            {{else}}
+                                                <h1>Long Description :</h1> <p style="background-color: #f4eee8;"> Not Available</p><br>
+                                            {{/if}}  
+                                        </div>
+                                        <div class="col-lg-3" style="">
+                                            <img class="img-fluid" src="{{thumbnailUrl}}" alt=""> <br>
+                                            isbn : {{isbn}} <br>
+                                            Page Count : {{pageCount}} <br>
+                                            published Date : {{publishedDate}} <br>
+                                            discount : {{discount}} <br>
+                                            discount Units : {{discountUnits}}
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        {{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+    $('#data').after('<div id="nav"></div>');
+    var rowsShown = 20;
+    var rowsTotal = $('#data tbody tr').length;
+    var numPages = rowsTotal/rowsShown;
+    for(i = 0;i < numPages;i++) {
+        var pageNum = i + 1;
+        $('#nav').append('<a class="anchor" href="#" rel="'+i+'">'+pageNum+'</a> ');
+    }
+    $('#data tbody tr').hide();
+    $('#data tbody tr').slice(0, rowsShown).show();
+    $('#nav a:first').addClass('active');
+    $('#nav a').bind('click', function(){
+
+        $('#nav a').removeClass('active');
+        $(this).addClass('active');
+        var currPage = $(this).attr('rel');
+        var startItem = currPage * rowsShown;
+        var endItem = startItem + rowsShown;
+        $('#data tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
+        css('display','table-row').animate({opacity:1}, 300);
+    });
+});
+</script>
+
+
+
+
+
