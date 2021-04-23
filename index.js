@@ -26,7 +26,7 @@ const Book = mongoose.model('Book', booksSchema);
 
 app.get('/', (req,res)=>{
     Book.find({}, function(err, books){
-        res.render('books', {
+        res.render('dataTables', {
             layout:false,
             booksList : books,
             i:0

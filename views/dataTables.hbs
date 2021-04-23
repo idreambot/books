@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <style>
+             td.details-control {
+                background: url('http://www.datatables.net/examples/resources/details_open.png') no-repeat center center;
+                cursor: pointer;
+            }
+            tr.shown td.details-control {
+                background: url('http://www.datatables.net/examples/resources/details_close.png') no-repeat center center;
+            }
+            .table {
+  table-layout: fixed;
+}
+.text-overflow {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+           td {
+
+}
+
+        </style>
+    </head>
+    <body>
+    <div class="container">
+
+        
+        <table id="example" class="table  display nowrap" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Price</th>
+                    <th>categories</th>
+                    <th>authors</th>
+                    <th>status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each booksList}}
+                    <tr data-key-1="{{shortDescription}}" data-key-2="{{longDescription}}" data-key-3="{{thumbnailUrl}}" data-key-4="{{isbn}}" data-key-5="{{pageCount}}" data-key-6="{{publishedDate}}" data-key-7="{{discount}}" data-key-8="{{discountUnits}}">
+                        <td class="details-control"></td>
+                        <td>{{title}}</td>
+                        <td>{{price}}</td>
+                        <td>{{categories}}</td>
+                        <td>{{authors}}</td>
+                        <td>{{status}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+        <script>
+            
+                function format(dataSource ) {
+                    var html = '';
+                    for (var key in dataSource){
+                        html +=    "<span class='text-overflow'>" +key + " : "+dataSource[key]+" </span>";
+                    }
+                    return html;
+                }
+                $(document).ready(function () {
+                    var table = $('#example').DataTable({});
+
+                    // Add event listener for opening and closing details
+                    $('#example').on('click', 'td.details-control', function () {
+                        var tr = $(this).closest('tr');
+                        var row = table.row(tr);
+
+                        if (row.child.isShown()) {
+                            // This row is already open - close it
+                            row.child.hide();
+                            tr.removeClass('shown');
+                        } else {
+                            // Open this row
+                           // row.child(format(tr.data('child-value'))).show();
+                           row.child(format({
+                                'Short Description' : tr.data('key-1'),
+                                'Long description' :  tr.data('key-2'),
+                                'imgSrc' :  tr.data('key-3'),
+                                'isbn' :  tr.data('key-4'),
+                                'Page Count' :  tr.data('key-5'),
+                                'Published Date' :  tr.data('key-6'),
+                                'Discount' :  tr.data('key-7'),
+                                'Discount Units' :  tr.data('key-8')
+                            })).show();
+                            tr.addClass('shown');
+                        }
+                    });
+                });
+        </script>
+    </body>
+</html>
